@@ -44,6 +44,21 @@ homeMedicRoutes.route('/api/patient').get(function(req, res){
      });
 });
 
+//deleteing fro database
+homeMedicRoutes.route('/api/patient/delete/:id').delete(function(req, res) {
+    let id = req.params.id;
+    Homemed.findByIdAndDelete(id, function(err) {
+        if (!err) {
+            res.sendStatus(200);
+        } else {
+            res.status(500).json({
+                error: err
+            })
+        }
+    });
+});
+
+
 
 //another endpoint retrieve one sepecific todo based on id
 homeMedicRoutes.route('/api/patient:id').get(function(req,res){
@@ -114,8 +129,23 @@ homeMedicRoutes.route('/api/patient/add').post(function(req, res){
  });
  
  
+//deleteing fro database
+homeMedicRoutes.route('/api/contact/delete/:id').delete(function(req, res) {
+    let id = req.params.id;
+    Homemed1.findByIdAndDelete(id, function(err) {
+        if (!err) {
+            res.sendStatus(200);
+        } else {
+            res.status(500).json({
+                error: err
+            })
+        }
+    });
+});
+
+
  //another endpoint retrieve one sepecific todo based on id
- homeMedicRoutes.route('/api/contact:id').get(function(req,res){
+ homeMedicRoutes.route('/api/contact/:id').get(function(req,res){
      let id=req.params.id  //accessing parameter for url
      Homemed1.findById(id,function(err, contact){
  
