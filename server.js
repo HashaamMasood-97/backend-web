@@ -31,9 +31,9 @@ connection.once('open', function(){
 
 //for patient
 
-/*
+
 //retrieving all the todos endpoint
-homeMedicRoutes.route('/').get(function(req, res){
+homeMedicRoutes.route('/api/patient').get(function(req, res){
     Homemed.find(function(err, homemedic){
          if(err){
            console.log(err); 
@@ -46,7 +46,7 @@ homeMedicRoutes.route('/').get(function(req, res){
 
 
 //another endpoint retrieve one sepecific todo based on id
-homeMedicRoutes.route('/:id').get(function(req,res){
+homeMedicRoutes.route('/api/patient:id').get(function(req,res){
     let id=req.params.id  //accessing parameter for url
     Homemed.findById(id,function(err, homemedics){
 
@@ -57,7 +57,7 @@ homeMedicRoutes.route('/:id').get(function(req,res){
 
 
 //adding new item to database
-homeMedicRoutes.route('/add').post(function(req, res){
+homeMedicRoutes.route('/api/patient/add').post(function(req, res){
     let homemedics= new Homemed(req.body);
     homemedics.save()
         .then(homemedics => {
@@ -72,7 +72,7 @@ homeMedicRoutes.route('/add').post(function(req, res){
  });
  
  //updating new todo
- homeMedicRoutes.route('/update/:id').post(function(req, res){
+ homeMedicRoutes.route('/api/patient/update/:id').post(function(req, res){
  Homemed.findById(req.params.id, function(err,homemedics){
  
      if(!homemedics)
@@ -94,7 +94,7 @@ homeMedicRoutes.route('/add').post(function(req, res){
  
  });
  
- }); */
+ }); 
 
  // till here
 
@@ -102,7 +102,7 @@ homeMedicRoutes.route('/add').post(function(req, res){
 
 
 
- homeMedicRoutes.route('/').get(function(req, res){
+ homeMedicRoutes.route('/api/contact').get(function(req, res){
      Homemed1.find(function(err, homemedic){
           if(err){
             console.log(err); 
@@ -115,7 +115,7 @@ homeMedicRoutes.route('/add').post(function(req, res){
  
  
  //another endpoint retrieve one sepecific todo based on id
- homeMedicRoutes.route('/:id').get(function(req,res){
+ homeMedicRoutes.route('/api/contact:id').get(function(req,res){
      let id=req.params.id  //accessing parameter for url
      Homemed1.findById(id,function(err, contact){
  
@@ -126,7 +126,7 @@ homeMedicRoutes.route('/add').post(function(req, res){
  
  
  //adding new item to database
- homeMedicRoutes.route('/add').post(function(req, res){
+ homeMedicRoutes.route('/api/contact/add').post(function(req, res){
      let contact= new Homemed1(req.body);
      contact.save()
          .then(contact => {
@@ -141,7 +141,7 @@ homeMedicRoutes.route('/add').post(function(req, res){
   });
   
   //updating new todo
-  homeMedicRoutes.route('/update/:id').post(function(req, res){
+  homeMedicRoutes.route('/api/contact/update/:id').post(function(req, res){
   Homemed1.findById(req.params.id, function(err,contact){
   
       if(!contact)
