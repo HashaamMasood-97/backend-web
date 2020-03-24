@@ -1,7 +1,7 @@
 const mongoose= require('mongoose');
 const Schema1= mongoose.Schema;
 
-let Homemed1= new Schema1({
+let contactSchema= new Schema1({
         c_name:{
       type: String
   },
@@ -25,4 +25,4 @@ let Homemed1= new Schema1({
 });
 
 
-module.exports= mongoose.model('patient', Homemed1); 
+module.exports= mongoose.model('contact', contactSchema); 

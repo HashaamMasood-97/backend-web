@@ -7,8 +7,13 @@ const homeMedicRoutes = express.Router();
 const PORT = 3500;
 
 
-let Homemed=require('./homemedics.model');
-let Homemed1=require('./contact.model');
+
+
+
+let patientSchema=require('./patient.model');
+let contactSchema=require('./contact.model');
+let UserSchema=require('./User');
+let UserSessionSchema=require('./UserSession');
 
 
 
@@ -27,14 +32,12 @@ connection.once('open', function(){
 
 
 //homemedic is database name 
-//for http requests and endpoints stuff
+
 
 //for patient
-
-
 //retrieving all the todos endpoint
 homeMedicRoutes.route('/api/patient').get(function(req, res){
-    Homemed.find(function(err, homemedic){
+    patientSchema.find(function(err, homemedic){
          if(err){
            console.log(err); 
 }
@@ -44,10 +47,10 @@ homeMedicRoutes.route('/api/patient').get(function(req, res){
      });
 });
 
-//deleteing fro database
+//deleteing from database
 homeMedicRoutes.route('/api/patient/delete/:id').delete(function(req, res) {
     let id = req.params.id;
-    Homemed.findByIdAndDelete(id, function(err) {
+    patientSchema.findByIdAndDelete(id, function(err) {
         if (!err) {
             res.sendStatus(200);
         } else {
@@ -63,7 +66,7 @@ homeMedicRoutes.route('/api/patient/delete/:id').delete(function(req, res) {
 //another endpoint retrieve one sepecific todo based on id
 homeMedicRoutes.route('/api/patient:id').get(function(req,res){
     let id=req.params.id  //accessing parameter for url
-    Homemed.findById(id,function(err, homemedics){
+    patientSchema.findById(id,function(err, homemedics){
 
        res.json(homemedics);
 
@@ -73,7 +76,7 @@ homeMedicRoutes.route('/api/patient:id').get(function(req,res){
 
 //adding new item to database
 homeMedicRoutes.route('/api/patient/add').post(function(req, res){
-    let homemedics= new Homemed(req.body);
+    let homemedics= new patientSchema(req.body);
     homemedics.save()
         .then(homemedics => {
             res.status(200).json({'Form': 'added successfully'});
@@ -88,7 +91,7 @@ homeMedicRoutes.route('/api/patient/add').post(function(req, res){
  
  //updating new todo
  homeMedicRoutes.route('/api/patient/update/:id').post(function(req, res){
- Homemed.findById(req.params.id, function(err,homemedics){
+ patientSchema.findById(req.params.id, function(err,homemedics){
  
      if(!homemedics)
      res.status(404).send('data is not found');
@@ -113,12 +116,13 @@ homeMedicRoutes.route('/api/patient/add').post(function(req, res){
 
  // till here
 
+
+
+
+
  //for contact us form
-
-
-
  homeMedicRoutes.route('/api/contact').get(function(req, res){
-     Homemed1.find(function(err, homemedic){
+     contactSchema.find(function(err, homemedic){
           if(err){
             console.log(err); 
  }
@@ -129,10 +133,10 @@ homeMedicRoutes.route('/api/patient/add').post(function(req, res){
  });
  
  
-//deleteing fro database
+//deleteing from database
 homeMedicRoutes.route('/api/contact/delete/:id').delete(function(req, res) {
     let id = req.params.id;
-    Homemed1.findByIdAndDelete(id, function(err) {
+    contactSchema.findByIdAndDelete(id, function(err) {
         if (!err) {
             res.sendStatus(200);
         } else {
@@ -147,7 +151,7 @@ homeMedicRoutes.route('/api/contact/delete/:id').delete(function(req, res) {
  //another endpoint retrieve one sepecific todo based on id
  homeMedicRoutes.route('/api/contact/:id').get(function(req,res){
      let id=req.params.id  //accessing parameter for url
-     Homemed1.findById(id,function(err, contact){
+     contactSchema.findById(id,function(err, contact){
  
         res.json(contact);
  
@@ -157,7 +161,7 @@ homeMedicRoutes.route('/api/contact/delete/:id').delete(function(req, res) {
  
  //adding new item to database
  homeMedicRoutes.route('/api/contact/add').post(function(req, res){
-     let contact= new Homemed1(req.body);
+     let contact= new contactSchema(req.body);
      contact.save()
          .then(contact => {
              res.status(200).json({'Form': 'added successfully'});
@@ -172,7 +176,7 @@ homeMedicRoutes.route('/api/contact/delete/:id').delete(function(req, res) {
   
   //updating new todo
   homeMedicRoutes.route('/api/contact/update/:id').post(function(req, res){
-  Homemed1.findById(req.params.id, function(err,contact){
+  contactSchema.findById(req.params.id, function(err,contact){
   
       if(!contact)
       res.status(404).send('data is not found');
@@ -198,6 +202,219 @@ homeMedicRoutes.route('/api/contact/delete/:id').delete(function(req, res) {
 
 
 
+ 
+ //Sign Up and Sign In API's
+ //SIGN UP
+ homeMedicRoutes.route('/api/account/signup').post(function(req, res) {
+    const { body } = req;
+    const {
+       firstName,
+       lastName,     
+       password } = body;
+                let {
+                    email
+                }=body;
+
+      if(!firstName){
+        return res.send({
+            success: false,
+            message: 'Error: first name cannot be blank.'
+          });  
+ 
+       }
+
+       if(!lastName){
+        return res.send({
+            success: false,
+            message: 'Error: first name cannot be blank.'
+          });  
+      }
+
+
+    if (!email) {
+      return res.send({
+        success: false,
+        message: 'Error: Email cannot be blank.'
+      });
+    }
+    if (!password) {
+      return res.send({
+        success: false,
+        message: 'Error: Password cannot be blank.'
+      });
+    }
+ 
+       console.log('here');
+
+    email = email.toLowerCase();
+    email = email.trim();
+    // Steps:
+    // 1. Verify email doesn't exist
+    // 2. Save
+    UserSchema.find({
+      email: email
+    }, (err, previousUsers) => {
+      if (err) {
+        return res.send({
+          success: false,
+          message: 'Error: Server error'
+        });
+      } else if (previousUsers.length > 0) {
+        return res.send({
+          success: false,
+          message: 'Error: Account already exist.'
+        });
+      }
+      // Save the new user
+      const newUser = new UserSchema();
+      newUser.firstName=firstName;
+      newUser.lastName=lastName;
+      newUser.email = email;
+      newUser.password = newUser.generateHash(password);
+      newUser.save((err, user) => {
+        if (err) {
+          return res.send({
+            success: false,
+            message: 'Error: Server error'
+          });
+        }
+        return res.send({
+          success: true,
+          message: 'Signed up'
+        });
+      });
+    });
+  }); // end of sign up endpoint
+
+  
+  //signin
+  homeMedicRoutes.route('/api/account/signin').post(function(req, res) {
+    const { body } = req;
+    const {
+      password
+    } = body;
+    let {
+      email
+    } = body;
+    if (!email) {
+      return res.send({
+        success: false,
+        message: 'Error: Email cannot be blank.'
+      });
+    }
+    if (!password) {
+      return res.send({
+        success: false,
+        message: 'Error: Password cannot be blank.'
+      });
+    }
+    email = email.toLowerCase();
+    email = email.trim();
+    UserSchema.find({
+      email: email
+    }, (err, users) => {
+      if (err) {
+        console.log('err 2:', err);
+        return res.send({
+          success: false,
+          message: 'Error: server error'
+        });
+      }
+      if (users.length != 1) {
+        return res.send({
+          success: false,
+          message: 'Error: Invalid'
+        });
+      }
+      const user = users[0];
+      if (!user.validPassword(password)) {
+        return res.send({
+          success: false,
+          message: 'Error: Invalid password'
+        });
+      }
+      // Otherwise correct user
+      const userSession = new UserSessionSchema();
+      userSession.userId = user._id;
+      userSession.save((err, doc) => {
+        if (err) {
+          console.log(err);
+          return res.send({
+            success: false,
+            message: 'Error: server error'
+          });
+        }
+        return res.send({
+          success: true,
+          message: 'Valid sign in',
+          token: doc._id
+        });
+      });
+    });
+  });
+
+  //verify
+  homeMedicRoutes.route('/api/account/verify').get (function(req, res){
+    // Get the token
+    const { query } = req;
+    const { token } = query;
+    // ?token=test
+    // Verify the token is one of a kind and it's not deleted.
+    UserSessionSchema.find({
+      _id: token,
+      isDeleted: false
+    }, (err, sessions) => {
+      if (err) {
+        console.log(err);
+        return res.send({
+          success: false,
+          message: 'Error: Server error'
+        });
+      }
+      if (sessions.length != 1) {
+        return res.send({
+          success: false,
+          message: 'Error: Invalid'
+        });
+      } else {
+        // DO ACTION
+        return res.send({
+          success: true,
+          message: 'Good'
+        });
+      }
+    });
+  });
+
+//logout
+  homeMedicRoutes.route('/api/account/logout').get(function(req, res) {
+    // Get the token
+    const { query } = req;
+    const { token } = query;
+    // ?token=test
+    // Verify the token is one of a kind and it's not deleted.
+    UserSessionSchema.findOneAndUpdate({
+      _id: token,
+      isDeleted: false
+    }, {
+      $set: {
+        isDeleted:true
+      }
+    }, null, (err, sessions) => {
+      if (err) {
+        console.log(err);
+        return res.send({
+          success: false,
+          message: 'Error: Server error'
+        });
+      }
+      return res.send({
+        success: true,
+        message: 'Good'
+      });
+    });
+  });
+
 
 
 app.use('/homemedic', homeMedicRoutes);
@@ -207,3 +424,12 @@ app.listen(PORT, function(){
     console.log("Server in running on PORT " + PORT);
 
 });
+
+
+
+
+
+
+
+  
+  
