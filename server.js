@@ -204,12 +204,45 @@ homeMedicRoutes.route('/api/contact/delete/:id').delete(function(req, res) {
 
  
  //Sign Up and Sign In API's
+
+
+ //Fetching all the accounts
+ homeMedicRoutes.route('/api/account/signup/get').get(function(req, res){
+  UserSchema.find(function(err, homemedic){
+       if(err){
+         console.log(err); 
+}
+        else{
+          res.json(homemedic);
+}
+   });
+});
+
+//deleting the accounts from database
+homeMedicRoutes.route('/api/account/delete/:id').delete(function(req, res) {
+  let id = req.params.id;
+  UserSchema.findByIdAndDelete(id, function(err) {
+      if (!err) {
+          res.sendStatus(200);
+      } else {
+          res.status(500).json({
+              error: err
+          })
+      }
+  });
+});
+
+
+
+
  //SIGN UP
  homeMedicRoutes.route('/api/account/signup').post(function(req, res) {
     const { body } = req;
     const {
        firstName,
-       lastName,     
+       lastName,
+       contact, 
+       gender,    
        password } = body;
                 let {
                     email
@@ -271,6 +304,8 @@ homeMedicRoutes.route('/api/contact/delete/:id').delete(function(req, res) {
       newUser.lastName=lastName;
       newUser.email = email;
       newUser.password = newUser.generateHash(password);
+      newUser.contact=contact;
+      newUser.gender=gender;
       newUser.save((err, user) => {
         if (err) {
           return res.send({

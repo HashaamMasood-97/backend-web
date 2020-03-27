@@ -1,6 +1,18 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const UserSchema = new mongoose.Schema({
+ 
+ 
+  firstName: {
+    type: String,
+    default: ''
+  },
+
+  lastName: {
+    type: String,
+    default: ''
+  },
+ 
   email: {
     type: String,
     default: ''
@@ -9,6 +21,18 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
+
+  contact: {
+    type: String,
+    default: ''
+  },
+
+  gender:{
+    type: String,
+    default:''
+ 
+ },
+
   isDeleted: {
     type: Boolean,
     default: false
