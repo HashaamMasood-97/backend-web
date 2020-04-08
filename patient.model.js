@@ -2,7 +2,7 @@ const mongoose= require('mongoose');
 const Schema= mongoose.Schema;
 
 let patientSchema= new Schema({
-        p_name:{
+  p_name:{
       type: String
   },
 
@@ -23,6 +23,22 @@ let patientSchema= new Schema({
  p_sex:{
    type: String
 
+},
+ 
+ DOB:{
+   type: String,
+},
+
+medhistory:{
+   type: String,
+},
+
+details:{
+   type: String,
+},
+
+status:{
+   type: String,
 }
 
 });

@@ -102,6 +102,9 @@ homeMedicRoutes.route('/api/patient/add').post(function(req, res){
         homemedics.p_phone= req.body.p_phone;
         homemedics.p_email= req.body.p_email;
         homemedics.p_sex= req.body.p_sex;
+        homemedics.DOB= req.body.DOB;
+        homemedics.details= req.body.details;
+        homemedics.medhistory= req.body.medhistory;
        
  
         homemedics.save().then(homemedics=>{
