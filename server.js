@@ -48,6 +48,18 @@ homeMedicRoutes.route('/api/patient').get(function(req, res){
      });
 });
 
+
+//another endpoint retrieve one sepecific todo based on id
+homeMedicRoutes.route('/api/patient:id').get(function(req,res){
+  let id=req.params.id  //accessing parameter for url
+  patientSchema.findById(id,function(err, homemedics){
+
+     res.json(homemedics);
+
+  });
+});
+
+
 //deleteing from database
 homeMedicRoutes.route('/api/patient/delete/:id').delete(function(req, res) {
     let id = req.params.id;
@@ -63,16 +75,6 @@ homeMedicRoutes.route('/api/patient/delete/:id').delete(function(req, res) {
 });
 
 
-
-//another endpoint retrieve one sepecific todo based on id
-homeMedicRoutes.route('/api/patient:id').get(function(req,res){
-    let id=req.params.id  //accessing parameter for url
-    patientSchema.findById(id,function(err, homemedics){
-
-       res.json(homemedics);
-
-    });
-});
 
 
 //adding new item to database
@@ -222,6 +224,15 @@ homeMedicRoutes.route('/api/contact/delete/:id').delete(function(req, res) {
    });
 });
 
+homeMedicRoutes.route('/api/account/signup/:id').get(function(req,res){
+  let id=req.params.id  //accessing parameter for url
+  UserSchema.findById(id,function(err, homemedics){
+
+     res.json(homemedics);
+
+  });
+});
+
 //deleting the accounts from database
 homeMedicRoutes.route('/api/account/delete/:id').delete(function(req, res) {
   let id = req.params.id;
@@ -350,7 +361,7 @@ homeMedicRoutes.route('/api/account/delete/:id').delete(function(req, res) {
     email = email.toLowerCase();
     email = email.trim();
     UserSchema.find({
-      email: email
+      email: email    
     }, (err, users) => {
       if (err) {
         console.log('err 2:', err);
@@ -362,7 +373,7 @@ homeMedicRoutes.route('/api/account/delete/:id').delete(function(req, res) {
       if (users.length != 1) {
         return res.send({
           success: false,
-          message: 'Error: Invalid'
+          message: 'Error: Invalid Email'
         });
       }
       const user = users[0];
@@ -471,6 +482,16 @@ homeMedicRoutes.route('/api/doctor/signup/get').get(function(req, res){
 }
    });
 });
+
+homeMedicRoutes.route('/api/doctor/signup/:id').get(function(req,res){
+  let id=req.params.id  //accessing parameter for url
+  DoctorSchema.findById(id,function(err, homemedics){
+
+     res.json(homemedics);
+
+  });
+});
+
 
 //deleting the accounts from database
 homeMedicRoutes.route('/api/doctor/delete/:id').delete(function(req, res) {

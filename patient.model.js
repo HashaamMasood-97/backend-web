@@ -39,7 +39,20 @@ details:{
 
 status:{
    type: String,
+},
+
+firstName:{
+   type: String,
+},
+
+lastName:{
+   type: String,
+},
+
+specialisation:{
+   type: String,
 }
+
 
 });
 
