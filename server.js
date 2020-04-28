@@ -41,7 +41,7 @@ connection.once('open', function(){
 //new login till here
 
 
-//for patient
+//for patient form
 //retrieving all the todos endpoint
 homeMedicRoutes.route('/api/patient').get(function(req, res){
     patientSchema.find(function(err, homemedic){
@@ -56,13 +56,29 @@ homeMedicRoutes.route('/api/patient').get(function(req, res){
 
 
 //another endpoint retrieve one sepecific todo based on id
-homeMedicRoutes.route('/api/patient:id').get(function(req,res){
-  let id=req.params.id  //accessing parameter for url
-  patientSchema.findById(id,function(err, homemedics){
-
+homeMedicRoutes.route('/api/patients/:id').get(function(req,res){
+    //accessing parameter for url
+  patientSchema.find({user_id: req.params.id},function(err, homemedics){
+     
      res.json(homemedics);
 
   });
+});
+
+
+homeMedicRoutes.route('/api/pat/:id').get(function(req,res){  
+  patientSchema.find({user_id: req.params.id})
+  .then(user => {
+    if (user) {
+      res.json(user)
+    } else {
+      res.send('User does not exist')
+    }
+  })
+  .catch(err => {
+    res.send('error: ' + err)
+  })
+
 });
 
 

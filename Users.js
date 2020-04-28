@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
 const User = require('./Userlogin')
+let patientSchema=require('./patient.model');
 users.use(cors())
 
 process.env.SECRET_KEY = 'secret'
@@ -109,5 +110,10 @@ users.get('/profile', (req, res) => {
       res.send('error: ' + err)
     })
 })
+
+
+
+
+
 
 module.exports = users

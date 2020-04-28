@@ -1,6 +1,9 @@
 const mongoose= require('mongoose');
 const Schema= mongoose.Schema;
 
+
+ObjectId = Schema.ObjectId;
+
 let patientSchema= new Schema({
   p_name:{
       type: String
@@ -51,6 +54,14 @@ lastName:{
 
 specialisation:{
    type: String,
+},
+
+doc_id:{
+   type: String,
+},
+user_id:{
+   type: ObjectId,
+   
 }
 
 
