@@ -57,7 +57,7 @@ specialisation:{
 },
 
 doc_id:{
-   type: String,
+   type: ObjectId,
 },
 user_id:{
    type: ObjectId,
