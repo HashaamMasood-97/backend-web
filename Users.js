@@ -76,9 +76,10 @@ users.post('/login', (req, res) => {
             gender: user.gender,
             email: user.email
           }
-          let token = jwt.sign(payload, process.env.SECRET_KEY, {
+          let token = jwt.sign(payload, process.env.SECRET_KEY)
+      /*    let token = jwt.sign(payload, process.env.SECRET_KEY, {
             expiresIn: 1440
-          })
+          })  */ 
           res.send(token)
         } else {
           // Passwords don't match
