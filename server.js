@@ -42,7 +42,7 @@ connection.once('open', function(){
 
 
 //for patient form
-//retrieving all the todos endpoint
+//retrieving all the booking form endpoint
 homeMedicRoutes.route('/api/patient').get(function(req, res){
     patientSchema.find(function(err, homemedic){
          if(err){
@@ -54,27 +54,6 @@ homeMedicRoutes.route('/api/patient').get(function(req, res){
      });
 });
 
-
-//another endpoint retrieve one sepecific todo based on id
-homeMedicRoutes.route('/api/patients/:id').get(function(req,res){
-    //accessing parameter for url
-  patientSchema.find({user_id: req.params.id},function(err, homemedics){
-     
-     res.json(homemedics);
-
-  });
-});
-
-
-
-//retrieving doc_id
-homeMedicRoutes.route('/api/doc/:id').get(function(req,res){  
-  patientSchema.find({doc_id: req.params.id},function(err, homemedics){
-     
-    res.json(homemedics);
-
-});
-});
 
 //deleteing from database
 homeMedicRoutes.route('/api/patient/delete/:id').delete(function(req, res) {
@@ -89,8 +68,6 @@ homeMedicRoutes.route('/api/patient/delete/:id').delete(function(req, res) {
         }
     });
 });
-
-
 
 
 //adding new item to database
@@ -135,6 +112,33 @@ homeMedicRoutes.route('/api/patient/add').post(function(req, res){
  });
  
  }); 
+
+
+
+
+
+
+  //self
+ //patient appoinment retireval by
+homeMedicRoutes.route('/api/patients/:id').get(function(req,res){
+    //accessing parameter for url
+  patientSchema.find({user_id: req.params.id},function(err, homemedics){
+     
+     res.json(homemedics);
+
+  });
+});
+
+
+
+//doc appointment retrieval by id
+homeMedicRoutes.route('/api/doc/:id').get(function(req,res){  
+  patientSchema.find({doc_id: req.params.id},function(err, homemedics){
+     
+    res.json(homemedics);
+
+});
+});
 
  // till here
 
@@ -224,8 +228,7 @@ homeMedicRoutes.route('/api/contact/delete/:id').delete(function(req, res) {
 
 
 
- 
- //Sign Up and Sign In API's
+
 
 
 

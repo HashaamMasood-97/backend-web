@@ -25,6 +25,44 @@ users.get('/register/get', (req, res) =>{
    });
 });
 
+
+//update
+users.post('/user/update/:id', (req, res)=>{
+  User.findById(req.params.id, function(err,usr){
+  
+      if(!usr)
+      res.status(404).send('data is not found');
+      else
+         usr.first_name= req.body.first_name;
+         usr.last_name= req.body.last_name;
+       
+         usr.phone= req.body.phone;
+      ;
+         
+      
+        
+  
+         usr.save().then(usr=>{
+             res.json('Form Updated');
+         })
+         .catch(err=> {
+             res.status(400).send("Updated not possibe");
+         });
+  
+  });
+  
+  });  
+
+  //get by id
+users.get('/register/user/:id', (req,res) =>{
+  let id=req.params.id  //accessing parameter for url
+  User.findById(id,function(err, contact){
+
+     res.json(contact);
+
+  });
+});
+
 users.post('/register', (req, res) => {
   const today = new Date()
   const userData = {

@@ -4,7 +4,7 @@ const cors = require('cors')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
-const Doctor = require('./Doctorlogin')
+const doctor = require('./Doctorlogin')
 
 users.use(cors())
 
@@ -15,7 +15,7 @@ process.env.SECRET_KEY = 'secret'
 //fetching all the accounts
 
 users.get('/register/doctor/get', (req, res) =>{
-  Doctor.find(function(err, homemedic){
+  doctor.find(function(err, homemedic){
        if(err){
          console.log(err); 
 }
@@ -25,10 +25,73 @@ users.get('/register/doctor/get', (req, res) =>{
    });
 });
 
+//updating doc
+users.post('/doctor/update/:id', (req, res)=>{
+  doctor.findById(req.params.id, function(err,Doctor){
+  
+      if(!Doctor)
+      res.status(404).send('data is not found');
+      else
+         Doctor.firstName= req.body.firstName;
+         Doctor.lastName= req.body.lastName;
+         Doctor.workexp= req.body.workexp;
+         Doctor.specialisation= req.body.specialisation;
+         Doctor.qualification= req.body.qualification;
+         Doctor.nationality= req.body.nationality;
+         Doctor.DOB= req.body.DOB;
+         Doctor.contact=req.body.contact;
+         Doctor.fee=req.body.fee;
+        
+         
+      
+        
+  
+         Doctor.save().then(Doctor=>{
+             res.json('Form Updated');
+         })
+         .catch(err=> {
+             res.status(400).send("Updated not possibe");
+         });
+  
+  });
+  
+  });  
 
+
+  //updating doc timeslot
+users.post('/doctor/update/timeslot/:id', (req, res)=>{
+  doctor.findById(req.params.id, function(err,Doctor){
+  
+      if(!Doctor)
+      res.status(404).send('data is not found');
+      else
+      Doctor.slot1=req.body.slot1;
+      Doctor.slot2=req.body.slot2;
+      Doctor.slot3=req.body.slot3;
+      Doctor.slot4=req.body.slot4;
+      Doctor.slot5=req.body.slot5;
+    
+         
+      
+        
+  
+         Doctor.save().then(Doctor=>{
+             res.json('Form Updated');
+         })
+         .catch(err=> {
+             res.status(400).send("Updated not possibe");
+         });
+  
+  });
+  
+  }); 
+
+
+
+//get by id
 users.get('/register/doctor/:id', (req,res) =>{
   let id=req.params.id  //accessing parameter for url
-  Doctor.findById(id,function(err, contact){
+  doctor.findById(id,function(err, contact){
 
      res.json(contact);
 
@@ -36,16 +99,6 @@ users.get('/register/doctor/:id', (req,res) =>{
 });
 
 
-users.get('/register/doctor/get/:id', (req, res) =>{
-  Doctor.find(function(err, homemedic){
-       if(err){
-         console.log(err); 
-}
-        else{
-          res.json(homemedic);
-}
-   });
-});
 
 users.post('/register/doctor', (req, res) => {
   const today = new Date()
@@ -64,14 +117,14 @@ users.post('/register/doctor', (req, res) => {
     nationality: req.body.nationality,
     created: today
   }
-  Doctor.findOne({
+  doctor.findOne({
     email: req.body.email
   })
     .then(user => {
       if (!user) {
         bcrypt.hash(req.body.password, 10, (err, hash) => {
           userData.password = hash
-          Doctor.create(userData)
+          doctor.create(userData)
             .then(user => {
               res.json({ status: user.email + 'Registered!' })
             })
@@ -89,7 +142,7 @@ users.post('/register/doctor', (req, res) => {
 })
 
 users.post('/login/doctor', (req, res) => {
-  Doctor.findOne({
+  doctor.findOne({
     email: req.body.email
   })
     .then(user => {   
@@ -108,11 +161,10 @@ users.post('/login/doctor', (req, res) => {
             specialisation: user.specialisation,
             workexp: user.workexp,
             qualification: user.qualification,
-            nationality:user.nationality
+            nationality:user.nationality,
+          
           }
-          let token = jwt.sign(payload, process.env.SECRET_KEY, {
-            expiresIn: 1440
-          })
+          let token = jwt.sign(payload, process.env.SECRET_KEY)
           res.send(token)
         } else {
           // Passwords don't match
@@ -130,7 +182,7 @@ users.post('/login/doctor', (req, res) => {
 users.get('/profile/doctor', (req, res) => {
   var decoded = jwt.verify(req.headers['authorization'], process.env.SECRET_KEY)
 
-  Doctor.findOne({
+  doctor.findOne({
     _id: decoded._id
   })
     .then(user => {
