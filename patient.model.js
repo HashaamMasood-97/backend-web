@@ -56,6 +56,30 @@ specialisation:{
    type: String,
 },
 
+user_first:{
+   type:String,
+},
+
+user_last:{
+   type:String,
+},
+
+fee:{
+   type:String,
+},
+
+timeslot:{
+   type:String,
+},
+
+bookingstatus:{
+ type:String
+},
+
+reason:{
+type:String
+},
+
 doc_id:{
    type: ObjectId,
 },
@@ -63,6 +87,10 @@ user_id:{
    type: ObjectId,
    
 }
+
+
+
+
 
 
 });

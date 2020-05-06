@@ -114,7 +114,25 @@ homeMedicRoutes.route('/api/patient/add').post(function(req, res){
  }); 
 
 
-
+//updating bookingstatus
+homeMedicRoutes.route('/api/patient/update/bookingstatus/:id').post(function(req, res){
+    patientSchema.findById(req.params.id, function(err,patients){
+    
+        if(!patients)
+        res.status(404).send('data is not found');
+        else
+        patients.bookingstatus= req.body.bookingstatus;
+        patients.reason= req.body.reason;
+        patients.save().then(patients=>{
+               res.json('Form Updated');
+           })
+           .catch(err=> {
+               res.status(400).send("Updated not possibe");
+           });
+    
+    });
+    
+    });  
 
 
 
