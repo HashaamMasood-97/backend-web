@@ -24,6 +24,8 @@ app.use(cors());
 app.use(bodyParser.json());
 
 
+
+
 mongoose.connect('mongodb://127.0.0.1:27017/homemedic', {useNewUrlParser: true});
 const connection=mongoose.connection;
 
@@ -31,9 +33,85 @@ connection.once('open', function(){
     console.log("MongoDB database connection established");
     })
     
+// ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+app.use('/uploads', express.static('uploads'));
+
+
+var Image = require('./images');
+
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './uploads/');
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + file.originalname);
+    }
+});
+
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' ||  file.mimetype === 'image/jpg') {
+        cb(null, true);
+    } else {
+        // rejects storing a file
+        cb(null, false);
+    }
+}
+
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 1024 * 1024 * 5
+    },
+    fileFilter: fileFilter
+});
+
+/* 
+    stores image in uploads folder
+    using multer and creates a reference to the 
+    file
+*/
+homeMedicRoutes.route("/uploadmulter")
+    .post(upload.single('imageData'), (req, res, next) => {
+        console.log(req.body);
+        const newImage = new Image({
+            imageName: req.body.imageName,
+            imageData: req.file.path
+        });
+
+        newImage.save()
+            .then((result) => {
+                console.log(result);
+                res.status(200).json({
+                    success: true,
+                    document: result
+                });
+            })
+            .catch((err) => next(err));
+    });
 
 
 
+    homeMedicRoutes.route('/uploadmulter/get').get(function(req, res){
+        Image.find(function(err, homemedic){
+            if(err){
+              console.log(err); 
+   }
+             else{
+               res.json(homemedic);
+   }
+        });
+   });
+
+   
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////    
 
 
 
