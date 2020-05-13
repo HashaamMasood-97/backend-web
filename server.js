@@ -4,8 +4,6 @@ const bodyParser =require('body-parser');
 const cors= require('cors');
 const mongoose = require('mongoose');
 const homeMedicRoutes = express.Router();
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken')
 const PORT = 3500;
 
 
@@ -14,7 +12,7 @@ const PORT = 3500;
 
 let patientSchema=require('./patient.model');
 let contactSchema=require('./contact.model');
-let DoctorSchema=require('./Doctor');
+
 
 
 
@@ -92,6 +90,7 @@ homeMedicRoutes.route("/uploadmulter")
             .catch((err) => next(err));
     });
 
+    
 
 
     homeMedicRoutes.route('/uploadmulter/get').get(function(req, res){
@@ -105,6 +104,8 @@ homeMedicRoutes.route("/uploadmulter")
         });
    });
 
+
+
    
 
 
@@ -116,7 +117,6 @@ homeMedicRoutes.route("/uploadmulter")
 
 
 
-//new login till here
 
 
 //for patient form
