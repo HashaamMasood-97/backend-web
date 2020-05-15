@@ -98,6 +98,20 @@ users.get('/register/doctor/:id', (req,res) =>{
   });
 });
 
+//delete
+users.delete('/api/doctor/delete/:id', (req, res) =>{
+  let id = req.params.id;
+  doctor.findByIdAndDelete(id, function(err) {
+      if (!err) {
+          res.sendStatus(200);
+      } else {
+          res.status(500).json({
+              error: err
+          })
+      }
+  });
+});
+
 
 
 users.post('/register/doctor', (req, res) => {

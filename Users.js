@@ -63,6 +63,20 @@ users.get('/register/user/:id', (req,res) =>{
   });
 });
 
+//delete
+users.delete('/api/user/delete/:id', (req, res) =>{
+  let id = req.params.id;
+  User.findByIdAndDelete(id, function(err) {
+      if (!err) {
+          res.sendStatus(200);
+      } else {
+          res.status(500).json({
+              error: err
+          })
+      }
+  });
+});
+
 users.post('/register', (req, res) => {
   const today = new Date()
   const userData = {
