@@ -90,7 +90,15 @@ homeMedicRoutes.route("/uploadmulter")
             .catch((err) => next(err));
     });
 
+    homeMedicRoutes.get('/file/', function (req, res) {
+        Image.find(function(err){
+
+        
+        const filePath =req.file.path // find out the filePath based on given fileName
+        
+        res.sendFile(filepath);
     
+    })});
 
 
     homeMedicRoutes.route('/uploadmulter/get').get(function(req, res){
